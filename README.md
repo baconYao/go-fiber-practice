@@ -37,3 +37,12 @@ mysql> show databases;
 +--------------------+
 5 rows in set (0.00 sec)
 ```
+
+## Develop
+
+```bash
+# Run server support live reload
+$ air
+```
+
+PS. I am useing [`air live reload`](https://github.com/cosmtrek/air)
