@@ -46,3 +46,30 @@ $ air
 ```
 
 PS. I am useing [`air live reload`](https://github.com/cosmtrek/air)
+
+## API example
+
+* POST `/api/register`
+  * Body
+    ```json
+    {
+        "first_name": "peiyao",
+        "last_name": "chang",
+        "email": "yyy@gamil.com",
+        "password": "1234qwer",
+        "password_confirm": "1234qwer"
+    }
+    ```
+
+* POST `/api/login`
+
+  * Body
+    ```json
+    {
+        "email": "yyy@gamil.com",
+        "password": "1234qwer"
+    }
+    ```
+  * Response
+
+    `jwt token string`
