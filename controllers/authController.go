@@ -76,5 +76,58 @@ func Login(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
-	return c.JSON(token)
+	// 建立 cookie
+	cookie := fiber.Cookie{
+		Name: "jwt",
+		Value: token,
+		Expires: time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "success",
+	})
+}
+
+type Claims struct {
+	// 取得 jwt.StandardClaims 的 fields (如下)
+	jwt.StandardClaims
+	// Audience  string `json:"aud,omitempty"`
+	// ExpiresAt int64  `json:"exp,omitempty"`
+	// Id        string `json:"jti,omitempty"`
+	// IssuedAt  int64  `json:"iat,omitempty"`
+	// Issuer    string `json:"iss,omitempty"`
+	// NotBefore int64  `json:"nbf,omitempty"`
+	// Subject   string `json:"sub,omitempty"`
+}
+
+func User(c *fiber.Ctx) error {
+	// 取得名為 jwt 的 cookie
+	cookie := c.Cookies("jwt")
+	// 驗證並取得 jwt token
+	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
+	})
+
+	if err != nil || !token.Valid {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthenticated",
+		})
+	}
+
+	// 取得 claims 內的 field 資訊
+	claims := token.Claims.(*Claims)
+	// 若沒有 .(*Claims)
+	// claims := token.Claims
+	// 則會回傳
+	// {
+	// 	"exp": 1619104831,
+	// 	"iss": "1"
+	// }
+	var user models.User
+	database.DB.Where("id = ?", claims.Issuer).First(&user)
+	// TODO: 目前會回傳 user 的 password 欄位，雖然有 hash 過，但不該回傳給 user
+	return c.JSON(user)
 }

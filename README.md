@@ -73,3 +73,15 @@ PS. I am useing [`air live reload`](https://github.com/cosmtrek/air)
   * Response
 
     `jwt token string`
+
+* GET `/api/user`
+  * Response
+  ```json
+  {
+      "Id": 1,
+      "FirstName": "peiyao",
+      "LastName": "chang",
+      "Email": "yyy@gamil.com",
+      "Password": "JDJhJDEwJFU5VnJ2TnNYdUpPQmZxeWtacWdqWS52eHNoVGxpOWhGODNlc1l2VjlHcm9wWHNmSDAxSHpp"
+  }
+  ```
