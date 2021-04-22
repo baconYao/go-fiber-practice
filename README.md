@@ -85,3 +85,11 @@ PS. I am useing [`air live reload`](https://github.com/cosmtrek/air)
       "Password": "JDJhJDEwJFU5VnJ2TnNYdUpPQmZxeWtacWdqWS52eHNoVGxpOWhGODNlc1l2VjlHcm9wWHNmSDAxSHpp"
   }
   ```
+
+* GET `/api/logout`
+  * Response
+  ```json
+  {
+      "message": "success"
+  }
+  ```
