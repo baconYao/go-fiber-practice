@@ -128,7 +128,6 @@ func User(c *fiber.Ctx) error {
 	// }
 	var user models.User
 	database.DB.Where("id = ?", claims.Issuer).First(&user)
-	// TODO: 目前會回傳 user 的 password 欄位，雖然有 hash 過，但不該回傳給 user
 	return c.JSON(user)
 }
 
