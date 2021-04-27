@@ -6,7 +6,7 @@ import (
 
 	"github.com/baconYao/go-fiber-practice/database"
 	"github.com/baconYao/go-fiber-practice/models"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/baconYao/go-fiber-practice/util"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -64,13 +64,8 @@ func Login(c *fiber.Ctx) error {
 			"message": "incorrect password",
 		})
 	}
-
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer: strconv.Itoa(int(user.Id)),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),	// 1 day
-	})
-
-	token, err := claims.SignedString([]byte("secret"))
+	// get jwt token
+	token, err := util.GenerateJwt(strconv.Itoa(int(user.Id)))
 
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
@@ -90,44 +85,14 @@ func Login(c *fiber.Ctx) error {
 	})
 }
 
-type Claims struct {
-	// 取得 jwt.StandardClaims 的 fields (如下)
-	jwt.StandardClaims
-	// Audience  string `json:"aud,omitempty"`
-	// ExpiresAt int64  `json:"exp,omitempty"`
-	// Id        string `json:"jti,omitempty"`
-	// IssuedAt  int64  `json:"iat,omitempty"`
-	// Issuer    string `json:"iss,omitempty"`
-	// NotBefore int64  `json:"nbf,omitempty"`
-	// Subject   string `json:"sub,omitempty"`
-}
-
 func User(c *fiber.Ctx) error {
 	// 取得名為 jwt 的 cookie
 	cookie := c.Cookies("jwt")
-	// 驗證並取得 jwt token
-	token, err := jwt.ParseWithClaims(cookie, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("secret"), nil
-	})
+	// Parse jwt token，並取的 user id
+	id, _ := util.ParseJwt(cookie)
 
-	if err != nil || !token.Valid {
-		c.Status(fiber.StatusUnauthorized)
-		return c.JSON(fiber.Map{
-			"message": "unauthenticated",
-		})
-	}
-
-	// 取得 claims 內的 field 資訊
-	claims := token.Claims.(*Claims)
-	// 若沒有 .(*Claims)
-	// claims := token.Claims
-	// 則會回傳
-	// {
-	// 	"exp": 1619104831,
-	// 	"iss": "1"
-	// }
 	var user models.User
-	database.DB.Where("id = ?", claims.Issuer).First(&user)
+	database.DB.Where("id = ?", id).First(&user)
 	return c.JSON(user)
 }
 
