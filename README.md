@@ -76,20 +76,49 @@ PS. I am useing [`air live reload`](https://github.com/cosmtrek/air)
 
 * GET `/api/user`
   * Response
-  ```json
-  {
-      "Id": 1,
-      "FirstName": "peiyao",
-      "LastName": "chang",
-      "Email": "yyy@gamil.com",
-      "Password": "JDJhJDEwJFU5VnJ2TnNYdUpPQmZxeWtacWdqWS52eHNoVGxpOWhGODNlc1l2VjlHcm9wWHNmSDAxSHpp"
-  }
-  ```
+    ```json
+    {
+        "id": 1,
+        "first_name": "peiyao",
+        "last_name": "chang",
+        "email": "yyy@gamil.com",
+    }
+    ```
 
-* GET `/api/logout`
+* POST `/api/logout`
   * Response
-  ```json
-  {
-      "message": "success"
-  }
-  ```
+    ```json
+    {
+        "message": "success"
+    }
+    ```
+
+* GET `/api/users`
+  * Response
+    ```json
+    [
+        {
+            "id": 1,
+            "first_name": "peiyao",
+            "last_name": "chang",
+            "email": "yyy@gamil.com",
+        },
+        {
+            "id": 2,
+            "first_name": "haha",
+            "last_name": "QQ",
+            "email": "maillll"
+        }
+    ]
+    ```
+
+* POST `/api/users`
+  * Body
+    ```json
+    {
+        "first_name": "haha",
+        "last_name": "QQ",
+        "email": "asdas@gamil.com",
+    }
+    ```
+  
