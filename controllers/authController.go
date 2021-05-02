@@ -8,7 +8,6 @@ import (
 	"github.com/baconYao/go-fiber-practice/models"
 	"github.com/baconYao/go-fiber-practice/util"
 	"github.com/gofiber/fiber/v2"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -25,15 +24,13 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
-	// Hash password
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
-	
 	user := models.User{
 		FirstName: data["first_name"],
 		LastName: data["last_name"],
 		Email: data["email"],
-		Password: hashedPassword,
 	}
+	// Hash password
+	user.SetPassword(data["password"])
 
 	// 使用 database 暴露的 DB，將 user 存進 DB
 	database.DB.Create(&user)
@@ -58,7 +55,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	// 檢查密碼是否相同
-	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"])); err != nil {
+	if err := user.ComparePassword(data["password"]); err != nil {
 		c.Status(400)
 		return c.JSON(fiber.Map{
 			"message": "incorrect password",
