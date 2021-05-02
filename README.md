@@ -45,7 +45,7 @@ mysql> show databases;
 $ air
 ```
 
-PS. I am useing [`air live reload`](https://github.com/cosmtrek/air)
+PS. I am using [`air live reload`](https://github.com/cosmtrek/air)
 
 ## API example
 
