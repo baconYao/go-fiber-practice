@@ -8,62 +8,62 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func AllRoles(c *fiber.Ctx) error {
-	var roles []models.Role
+func AllUsers(c *fiber.Ctx) error {
+	var users []models.User
 
-	database.DB.Find(&roles)
-
-	return c.JSON(roles)
+	database.DB.Preload("Role").Find(&users)
+	return c.JSON(users)
 }
 
-func CreateRole(c *fiber.Ctx) error {
-	var role models.Role
+func CreateUser(c *fiber.Ctx) error {
+	var user models.User
 
-	if err := c.BodyParser(&role); err != nil {
+	if err := c.BodyParser(&user); err != nil {
 		return err
 	}
 
-	database.DB.Create(&role)
-	return c.JSON(role)
+	user.SetPassword("1234")
+	database.DB.Create(&user)
+	return c.JSON(user)
 }
 
-func GetRole(c *fiber.Ctx) error {
+func GetUser(c *fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
-	role := models.Role{
+	user := models.User{
 		Id: uint(id),
 	}
 
-	result := database.DB.Find(&role)
+	result := database.DB.Preload("Role").Find(&user)
 	if result.RowsAffected == 0 {
 		return c.JSON(fiber.Map{
-			"message": "Role not found",
+			"message": "User not found",
 		})
 	}
-	return c.JSON(role)
+	return c.JSON(user)
 }
 
-func UpdateRole(c *fiber.Ctx) error {
+func UpdateUser(c *fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
-	role := models.Role{
+	user := models.User{
 		Id: uint(id),
 	}
 
-	if err := c.BodyParser(&role); err != nil {
+	if err := c.BodyParser(&user); err != nil {
 		return err
 	}
 
-	database.DB.Model(&role).Updates(role)
+	database.DB.Model(&user).Updates(user)
 
-	return c.JSON(role)
+	return c.JSON(user)
 }
 
-func DeleteRole(c *fiber.Ctx) error {
+func DeleteUser(c *fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
-	role := models.Role{
+	user := models.User{
 		Id: uint(id),
 	}
 
-	database.DB.Delete(&role)
+	database.DB.Delete(&user)
 
 	return nil
 }
