@@ -38,6 +38,44 @@ mysql> show databases;
 5 rows in set (0.00 sec)
 ```
 
+After creating `go_admin` DB, start up the server, then `GORM` will do `migration` to create tables like below
+
+```mysql
+mysql> show tables;
++--------------------+
+| Tables_in_go_admin |
++--------------------+
+| permissions        |
+| role_permissions   |
+| roles              |
+| users              |
++--------------------+
+4 rows in set (0.00 sec)
+```
+
+### Permissions
+
+Pre-build the permission values
+
+```mysql
+mysql> INSERT INTO permissions (Name) VALUES ('view_orders');
+
+mysql> SELECT * FROM permissions;
++----+---------------+
+| id | name          |
++----+---------------+
+|  1 | view_users    |
+|  2 | edit_users    |
+|  3 | view_roles    |
+|  4 | edit_roles    |
+|  5 | view_products |
+|  6 | edit_products |
+|  7 | view_orders   |
+|  8 | edit_orders   |
++----+---------------+
+8 rows in set (0.00 sec)
+```
+
 ## Develop
 
 ```bash
