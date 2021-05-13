@@ -159,4 +159,55 @@ PS. I am using [`air live reload`](https://github.com/cosmtrek/air)
         "email": "asdas@gamil.com",
     }
     ```
-  
+
+* POST `/api/roles`
+  * Body
+    ```json
+    {
+        "name": "test2",
+        "permissions": ["1", "3"]
+    }
+    ```
+  * Response
+    ```json
+    {
+        "id": 5,
+        "name": "test2",
+        "permissions": [
+            {
+                "id": 1,
+                "name": ""
+            },
+            {
+                "id": 3,
+                "name": ""
+            }
+        ]
+    }
+    ```
+
+* PUT `/api/roles/:id`
+  * Body
+    ```json
+    {
+        "name": "test2 to 3",
+        "permissions": ["5", "4"]
+    }
+    ```
+  * Response
+    ```json
+    {
+        "id": 5,
+        "name": "test2 to 3",
+        "permissions": [
+            {
+                "id": 4,
+                "name": ""
+            },
+            {
+                "id": 6,
+                "name": ""
+            }
+        ]
+    }
+    ```
