@@ -11,7 +11,7 @@ import (
 func AllRoles(c *fiber.Ctx) error {
 	var roles []models.Role
 
-	database.DB.Find(&roles)
+	database.DB.Preload("Permissions").Find(&roles)
 
 	return c.JSON(roles)
 }
@@ -57,7 +57,7 @@ func GetRole(c *fiber.Ctx) error {
 		Id: uint(id),
 	}
 
-	result := database.DB.Find(&role)
+	result := database.DB.Preload("Permissions").Find(&role)
 	if result.RowsAffected == 0 {
 		return c.JSON(fiber.Map{
 			"message": "Role not found",
