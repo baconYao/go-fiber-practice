@@ -131,23 +131,42 @@ PS. I am using [`air live reload`](https://github.com/cosmtrek/air)
     }
     ```
 
-* GET `/api/users`
+* GET `/api/users?page=1`
   * Response
     ```json
-    [
-        {
-            "id": 1,
-            "first_name": "peiyao",
-            "last_name": "chang",
-            "email": "yyy@gamil.com",
-        },
-        {
-            "id": 2,
-            "first_name": "haha",
-            "last_name": "QQ",
-            "email": "maillll"
+    {
+        "data": [
+            {
+                "id": 1,
+                "first_name": "peiyao",
+                "last_name": "chang",
+                "email": "yyy@gamil.com",
+                "role_id": 1,
+                "role": {
+                    "id": 1,
+                    "name": "admin",
+                    "permissions": null
+                }
+            },
+            {
+                "id": 7,
+                "first_name": "hi",
+                "last_name": "there",
+                "email": "yyy22@gamil.com",
+                "role_id": 1,
+                "role": {
+                    "id": 1,
+                    "name": "admin",
+                    "permissions": null
+                }
+            }
+        ],
+        "meta": {
+            "last_page": 0,
+            "page": 1,
+            "total": 2
         }
-    ]
+    }
     ```
 
 * POST `/api/users`
