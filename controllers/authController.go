@@ -108,3 +108,57 @@ func Logout(c *fiber.Ctx) error {
 		"message": "success",
 	})
 }
+
+// User 用來更新自己的資訊的 api
+func UpdateInfo(c *fiber.Ctx) error {
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	cookie := c.Cookies("jwt")
+	id, _ := util.ParseJwt(cookie)
+	userId, _ := strconv.Atoi(id)
+	user := models.User {
+		Id: uint(userId),
+		FirstName: data["first_name"],
+		LastName: data["last_name"],
+		Email: data["email"],
+	}
+	database.DB.Model(&user).Updates(user)
+	return c.JSON(user)
+}
+
+// User 用來更新自己的資訊的 api
+func UpdatePassword(c *fiber.Ctx) error {
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	if data["password"] != data["password_confirm"] {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "Password doesn't match",
+		})
+	}
+
+	cookie := c.Cookies("jwt")
+	id, _ := util.ParseJwt(cookie)
+	userId, _ := strconv.Atoi(id)
+	user := models.User {
+		Id: uint(userId),
+	}
+	user.SetPassword(data["password"])
+	// database.DB.Model(&user).Updates(user)
+	if result := database.DB.Model(&user).Updates(user); result.Error != nil {
+		c.Status(500)
+		return c.JSON(fiber.Map {
+			"success": false,
+			"message": "Update password failed",
+			"error message": result.Error,
+		})
+	}
+	return c.JSON(fiber.Map {
+		"success": true,
+	})
+}

@@ -12,6 +12,11 @@ func Setup(app *fiber.App) {
 
 	// 使用 auth middleware (以下的 api 都會有 auth 控管)
 	app.Use(middlewares.IsAuthenticated)
+
+	// User 更新 profile
+	app.Put("/api/users/info", controllers.UpdateInfo)
+	app.Put("/api/users/password", controllers.UpdatePassword)
+
 	// 取得 user 資訊
 	app.Get("/api/user", controllers.User)
 	// 登出

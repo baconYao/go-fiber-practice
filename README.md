@@ -123,6 +123,25 @@ PS. I am using [`air live reload`](https://github.com/cosmtrek/air)
     }
     ```
 
+* PUT `/api/users/info`
+  * Body
+    ```json
+    {
+        "first_name": "new yao222",
+        "last_name": "ppchang",
+        "email": "hip@mail.com"
+    }
+    ```
+
+* PUT `/api/users/password`
+  * Body
+    ```json
+    {
+      "password": "123456",
+      "password_confirm": "123456"
+    }
+    ```
+
 * POST `/api/logout`
   * Response
     ```json
