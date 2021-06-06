@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"math"
 	"strconv"
 
 	"github.com/baconYao/go-fiber-practice/database"
@@ -12,22 +11,8 @@ import (
 func AllUsers(c *fiber.Ctx) error {
 	// Get query param 'page', its default value: 1
 	page, _ := strconv.Atoi(c.Query("page", "1"))
-	// 每次最多顯示五筆資料
-	limit := 5
-	offset := (page - 1) * limit
-	var total int64
-	var users []models.User
-
-	database.DB.Preload("Role").Offset(offset).Limit(limit).Find(&users)
-	database.DB.Model(&models.User{}).Count(&total)
-	return c.JSON(fiber.Map{
-		"data": users,
-		"meta": fiber.Map{
-			"total": total,
-			"page":	page,
-			"last_page": math.Ceil(float64(int(total) / limit)),
-		},
-	})
+	
+	return c.JSON(models.Paginate(database.DB, &models.User{}, page))
 }
 
 func CreateUser(c *fiber.Ctx) error {
