@@ -249,3 +249,21 @@ PS. I am using [`air live reload`](https://github.com/cosmtrek/air)
         ]
     }
     ```
+
+* POST `/api/upload`
+  * Body
+    form-data
+      key: image
+        type: file
+  * Response
+    ```json
+    {
+        "url": "http://localhost:3000/api/uploads/柴.jpg"
+    }
+    ```
+  * ![Alt text](./readme_images/upload-form-example.png)
+
+* GET `/api/uploads/[image_name].extension`
+  * Response
+    file
+  * ![Alt text](./readme_images/get-uploaded-image.png)
