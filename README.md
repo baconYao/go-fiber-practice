@@ -45,7 +45,10 @@ mysql> show tables;
 +--------------------+
 | Tables_in_go_admin |
 +--------------------+
+| order_items        |
+| orders             |
 | permissions        |
+| products           |
 | role_permissions   |
 | roles              |
 | users              |
