@@ -4,11 +4,15 @@ import (
 	"strconv"
 
 	"github.com/baconYao/go-fiber-practice/database"
+	"github.com/baconYao/go-fiber-practice/middlewares"
 	"github.com/baconYao/go-fiber-practice/models"
 	"github.com/gofiber/fiber/v2"
 )
 
 func AllUsers(c *fiber.Ctx) error {
+	if err := middlewares.IsAuthorized(c, "users"); err != nil {
+		return err
+	}
 	// Get query param 'page', its default value: 1
 	page, _ := strconv.Atoi(c.Query("page", "1"))
 	
@@ -16,6 +20,10 @@ func AllUsers(c *fiber.Ctx) error {
 }
 
 func CreateUser(c *fiber.Ctx) error {
+	if err := middlewares.IsAuthorized(c, "users"); err != nil {
+		return err
+	}
+
 	var user models.User
 
 	if err := c.BodyParser(&user); err != nil {
@@ -28,6 +36,10 @@ func CreateUser(c *fiber.Ctx) error {
 }
 
 func GetUser(c *fiber.Ctx) error {
+	if err := middlewares.IsAuthorized(c, "users"); err != nil {
+		return err
+	}
+
 	id, _ := strconv.Atoi(c.Params("id"))
 	user := models.User{
 		Id: uint(id),
@@ -43,6 +55,10 @@ func GetUser(c *fiber.Ctx) error {
 }
 
 func UpdateUser(c *fiber.Ctx) error {
+	if err := middlewares.IsAuthorized(c, "users"); err != nil {
+		return err
+	}
+
 	id, _ := strconv.Atoi(c.Params("id"))
 	user := models.User{
 		Id: uint(id),
@@ -58,6 +74,10 @@ func UpdateUser(c *fiber.Ctx) error {
 }
 
 func DeleteUser(c *fiber.Ctx) error {
+	if err := middlewares.IsAuthorized(c, "users"); err != nil {
+		return err
+	}
+
 	id, _ := strconv.Atoi(c.Params("id"))
 	user := models.User{
 		Id: uint(id),
